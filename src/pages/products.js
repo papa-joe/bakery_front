@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const Products = ({ setToken, setType, mobile, token }) => {
 
     const [post, setpost] = useState('')
+    const navigate = useNavigate();
 
     const getpost = async () => {
 
@@ -18,19 +19,16 @@ const Products = ({ setToken, setType, mobile, token }) => {
                 },
             })
 
-            if (data.status == 'login') {
+            if (data.status === 'login') {
                 setType('logout')
                 setToken('')
                 return
             }
 
             setpost(data.products)
-
-            console.log(data.products)
         } catch (error) {
-            console.log(error.response.data.status)
 
-            if (error.response.data.status == 'login') {
+            if (error.response.data.status === 'login') {
                 setType('logout')
                 setToken('')
                 return
@@ -39,8 +37,12 @@ const Products = ({ setToken, setType, mobile, token }) => {
 
     }
 
+    const goToEdit = (p) => {
+        localStorage.setItem('myObject', JSON.stringify(p));
+        navigate('/edit-product')
+    }
+
     useEffect(() => {
-        console.log(token)
         window.scrollTo(0, 0)
         getpost();
     }, [])
@@ -88,14 +90,13 @@ const Products = ({ setToken, setType, mobile, token }) => {
                                     <tbody>
                                         {post.length != 0 &&
                                             post.map((post, index) => (
-                                                <tr>
+                                                <tr key={index}>
                                                     <th>{post.name}</th>
                                                     <th>{post.price}</th>
                                                     <th>{post.quantity}</th>
                                                     <th>
-                                                        <Link to={'/'}>
-                                                            <strong>Edit</strong>
-                                                        </Link>
+                                                    <button onClick={() => goToEdit(post)}>Edit</button>
+
                                                     </th>
                                                 </tr>
                                             ))
