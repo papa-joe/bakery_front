@@ -2,19 +2,34 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom'
 
-const Addproduct = ({ setToken, setType, mobile, token }) => {
+const Editproduct = ({ setToken, setType, mobile, token }) => {
 
     const [productPrice, setprice] = useState();
     const [productName, setname] = useState();
     const [productQuantity, setquantity] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [url, setUrl] = useState();
+    const [id, setId] = useState();
+    const [qty, setQty] = useState();
+
+    function getProduct() {
+        const product = JSON.parse(localStorage.getItem('myObject'));
+        setprice(product.price)
+        setname(product.name)
+        setquantity(product.quantity)
+        setUrl('http://localhost:4000/stock_product/'+product.id)
+        setId(product.id)
+        console.log(product)
+    }
 
     async function addProduct(e) {
         e.preventDefault();
 
+        alert(qty)
+
         setIsLoading(true);
 
-        if (productName == null || productPrice == null || productQuantity == null) {
+        if (qty == null) {
             setIsLoading(false);
             alert('All fields must be filled')
             return
@@ -22,13 +37,14 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
 
         let formfield = new FormData()
 
+        formfield.append('id', productName)
         formfield.append('name', productName)
         formfield.append('price', productPrice)
-        formfield.append('quantity', productQuantity)
+        formfield.append('quantity', qty)
 
         try {
             const { data } = await axios({
-                url: 'http://localhost:4000/add_product',
+                url: url,
                 method: 'POST',
                 data: formfield,
                 headers: {
@@ -39,10 +55,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
 
             if (data.status == 'success') {
                 setIsLoading(false);
-                setprice(null)
-                setname(null)
-                setquantity(null)
-                alert('Product added successfully')
+                alert('Product edited successfully')
                 return
             }
 
@@ -60,6 +73,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
+        getProduct()
     }, [])
 
     return (
@@ -71,7 +85,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
                             <div className="">
                                 <div className="panel panel-default">
                                     <div className="panel-heading" style={{ textAlign: "left" }}>
-                                        New Products
+                                        Edit Products
                                     </div>
                                     <form onSubmit={addProduct} style={{
                                         paddingTop: '15px',
@@ -80,7 +94,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
                                         paddingBottom: '30px'
                                     }}>
                                         <label>Enter Name</label>
-                                        <input type="text" className="ggg" name="name" placeholder="Name" onChange={e => setname(e.target.value)} required="" style={{
+                                        <input type="text" className="ggg" name="name" placeholder="Name" value={productName} onChange={e => setname(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -94,7 +108,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
                                         }} />
 
                                         <label>Enter Price</label>
-                                        <input type="number" className="ggg" name="price" placeholder="Price" onChange={e => setprice(e.target.value)} required="" style={{
+                                        <input type="number" className="ggg" name="price" placeholder="Price" value={productPrice} onChange={e => setprice(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -107,8 +121,10 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
                                             paddingBottom: '15px'
                                         }} />
 
-                                        <label>Enter Quantity</label>
-                                        <input type="number" className="ggg" name="quantity" placeholder="Quantity" onChange={e => setquantity(e.target.value)} required="" style={{
+                                        <label>Enter Quantity</label><br></br>
+                                        <small>Current quantity is: <strong>{productQuantity}</strong></small><br></br>
+                                        <small>Enter quantity to add below</small>
+                                        <input type="number" className="ggg" name="quantity" placeholder="Quantity" onChange={e => setQty(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -135,4 +151,4 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
     );
 };
 
-export default Addproduct;
+export default Editproduct;

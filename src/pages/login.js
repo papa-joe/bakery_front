@@ -34,8 +34,6 @@ const Login = ({setToken, setType}) => {
         formfield.append('password', password)
 
         const token = await loginUser(formfield);
-        console.log('The token is '+token)
-        console.log(token.token)
         setType('login')
         setToken({token: token.token});
     }

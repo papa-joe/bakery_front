@@ -31,10 +31,7 @@ const Pos = ({ setToken, setType, mobile, token }) => {
             }
 
             setpost(data.products)
-
-            console.log(data.products)
         } catch (error) {
-            console.log(error.response.data.status)
 
             if (error.response.data.status == 'login') {
                 setType('logout')
@@ -81,8 +78,6 @@ const Pos = ({ setToken, setType, mobile, token }) => {
         setname(null)
         setquantity(null)
 
-        console.log(cart)
-
 
     }
 
@@ -92,7 +87,6 @@ const Pos = ({ setToken, setType, mobile, token }) => {
         setid(pId)
         setname(pName)
         setprice(pPrice)
-        console.log(pId, pName);
     };
 
     const clearCart = () => {
@@ -100,7 +94,6 @@ const Pos = ({ setToken, setType, mobile, token }) => {
     }
 
     useEffect(() => {
-        console.log(token)
         window.scrollTo(0, 0)
         getpost();
     }, [])
@@ -138,7 +131,7 @@ const Pos = ({ setToken, setType, mobile, token }) => {
                                             <option value=''>Choose Product</option>
                                             {products.length != 0 &&
                                                 products.map((p, index) => (
-                                                    <option value={JSON.stringify([p.id, p.name, p.price])}>{p.name}</option>
+                                                    <option key={index} value={JSON.stringify([p.id, p.name, p.price])}>{p.name}</option>
                                                 ))
                                             }
                                         </select>
