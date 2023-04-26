@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Products = ({ setToken, setType, mobile, token }) => {
+const History = ({ setToken, setType, mobile, token }) => {
 
     const [post, setpost] = useState('')
+    const [filterDate, setDate] = useState();
     const navigate = useNavigate();
 
     const getpost = async () => {
 
         try {
             const { data } = await axios({
-                url: 'http://localhost:4000/get_products',
+                url: 'http://localhost:4000/get_history',
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -25,7 +26,7 @@ const Products = ({ setToken, setType, mobile, token }) => {
                 return
             }
 
-            setpost(data.products)
+            setpost(data.records)
         } catch (error) {
 
             if (error.response.data.status === 'login') {
@@ -37,9 +38,23 @@ const Products = ({ setToken, setType, mobile, token }) => {
 
     }
 
-    const goToEdit = (p) => {
-        localStorage.setItem('myObject', JSON.stringify(p));
-        navigate('/edit-product')
+    const getRecords = async () => {
+        let formfield = new FormData()
+
+        formfield.append('date', filterDate)
+
+        const { data } = await axios({
+            url: 'http://localhost:4000/get_history',
+            method: 'POST',
+            data: formfield,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+        })
+
+        setpost([])
+        setpost(data.records)
     }
 
     useEffect(() => {
@@ -54,7 +69,22 @@ const Products = ({ setToken, setType, mobile, token }) => {
                     <div className="">
                         <div className="panel panel-default">
                             <div className="panel-heading" style={{ textAlign: "left" }}>
-                                Products
+                                History
+                            </div>
+                            <div className="row w3-res-tb">
+                                <div className="col-sm-5 m-b-xs">
+                                    
+                                </div>
+                                <div className="col-sm-4">
+                                </div>
+                                <div className="col-sm-3">
+                                    <div className="input-group">
+                                        <input onChange={e => setDate(e.target.value)} type="date" className="input-sm form-control" placeholder="Search" />
+                                        <span className="input-group-btn">
+                                            <button onClick={getRecords} className="btn btn-sm btn-default" type="button">Go!</button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <div className="table-responsive">
                                 <table className="table table-striped b-t b-light">
@@ -63,7 +93,8 @@ const Products = ({ setToken, setType, mobile, token }) => {
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
-                                            <th >Action</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,13 +104,18 @@ const Products = ({ setToken, setType, mobile, token }) => {
                                                     <th>{post.name}</th>
                                                     <th>{post.price}</th>
                                                     <th>{post.quantity}</th>
-                                                    <th>
-                                                    <button onClick={() => goToEdit(post)}>Edit</button>
-
-                                                    </th>
+                                                    <th>{post.total}</th>
+                                                    <th>{new Date(post.createdAt).toISOString().substring(0, 10)}</th>
                                                 </tr>
                                             ))
                                         }
+                                        {post.length != 0 && (
+                                            <tr>
+                                                <td colSpan="3"><strong>Total</strong></td>
+                                                <td>{post.reduce((acc, cur) => acc + cur.total, 0)}</td>
+                                                <td></td>
+                                            </tr>
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
@@ -91,4 +127,4 @@ const Products = ({ setToken, setType, mobile, token }) => {
     );
 };
 
-export default Products;
+export default History;

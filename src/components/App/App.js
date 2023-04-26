@@ -18,6 +18,8 @@ import Pos from '../../pages/pos';
 import Addproduct from '../../pages/add_product';
 import Editproduct from '../../pages/edit_product';
 import Products from '../../pages/products';
+import History from '../../pages/history';
+import Adduser from '../../pages/add_user';
 import useToken from './useToken';
 
 function App() {
@@ -39,8 +41,10 @@ function App() {
           <Route exact path="/" element={<Home mobile={mobile} />} />
           <Route exact path="/users" element={<Users mobile={mobile} />} />
           <Route exact path="/products" element={<Products mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
+          <Route exact path="/history" element={<History mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
           <Route exact path="/pos" element={<Pos mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
           <Route exact path="/add-product" element={<Addproduct mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
+          <Route exact path="/add-user" element={<Adduser mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
           <Route exact path="/edit-product" element={<Editproduct mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
         </Routes>
         <Footer />

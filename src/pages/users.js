@@ -7,29 +7,8 @@ const Users = ({ mobile }) => {
         <section className="wrapper">
           <div className="">
             <div className="panel panel-default">
-              <div className="panel-heading">
-                Responsive Table
-              </div>
-              <div className="row w3-res-tb">
-                <div className="col-sm-5 m-b-xs">
-                  <select className="input-sm form-control w-sm inline v-middle">
-                    <option value="0">Bulk action</option>
-                    <option value="1">Delete selected</option>
-                    <option value="2">Bulk edit</option>
-                    <option value="3">Export</option>
-                  </select>
-                  <button className="btn btn-sm btn-default">Apply</button>
-                </div>
-                <div className="col-sm-4">
-                </div>
-                <div className="col-sm-3">
-                  <div className="input-group">
-                    <input type="text" className="input-sm form-control" placeholder="Search" />
-                    <span className="input-group-btn">
-                      <button className="btn btn-sm btn-default" type="button">Go!</button>
-                    </span>
-                  </div>
-                </div>
+              <div className="panel-heading" style={{ textAlign: "left" }}>
+                Users
               </div>
               <div className="table-responsive">
                 <table className="table table-striped b-t b-light">

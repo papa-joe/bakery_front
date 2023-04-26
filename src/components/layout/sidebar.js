@@ -39,12 +39,17 @@ const Sidebar = ({mobile, setToken, setType, token}) => {
                 <div className="leftside-navigation">
                     <ul className="sidebar-menu" id="nav-accordion">
                         <li className="sub-menu side-bar-item">
-                            <a className="active" >
+                        <NavLink to="/">
                                 <i className="fa fa-dashboard"></i>
                                 <span>Dashboard</span>
-                            </a>
+                            </NavLink>
                         </li>
-                        
+                        <li className="sub-menu side-bar-item">
+                            <NavLink to="/add-user">
+                                <i className="fa fa-book"></i>
+                                <span>Add User</span>
+                            </NavLink>
+                        </li>
                         <li className="sub-menu side-bar-item">
                             <NavLink to="/users">
                                 <i className="fa fa-book"></i>
@@ -61,6 +66,12 @@ const Sidebar = ({mobile, setToken, setType, token}) => {
                         <NavLink to="/products">
                                 <i className="fa fa-book"></i>
                                 <span>Products</span>
+                            </NavLink>
+                        </li>
+                        <li className="sub-menu side-bar-item">
+                        <NavLink to="/history">
+                                <i className="fa fa-book"></i>
+                                <span>History</span>
                             </NavLink>
                         </li>
                         <li className="sub-menu side-bar-item">
