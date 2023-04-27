@@ -42,6 +42,39 @@ const Pos = ({ setToken, setType, mobile, token }) => {
 
     }
 
+    const confirmSales = async () => {
+
+        alert(JSON.stringify(cart))
+
+        try {
+            const { data } = await axios({
+                url: 'http://localhost:4000/confirm_sales',
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                data: JSON.stringify(cart)
+            })
+
+            // console.log(data)
+
+            // if (data.status == 'login') {
+            //     setType('logout')
+            //     setToken('')
+            //     return
+            // }
+        } catch (error) {
+
+            if (error.response.data.status == 'login') {
+                setType('logout')
+                setToken('')
+                return
+            }
+        }
+
+    }
+
     async function addToCart(e) {
         e.preventDefault();
 
@@ -213,7 +246,7 @@ const Pos = ({ setToken, setType, mobile, token }) => {
                                             paddingBottom: '30px'
                                         }}>
                                             <input type="submit" value="CLEAR CART" name="" style={{ marginRight: '5px' }} />
-                                            <input type="submit" value="CONFIRM" name="" />
+                                            <input type="button" value="CONFIRM" name="" onClick={confirmSales} />
                                         </form>
                                     </div>
                                 </div>
