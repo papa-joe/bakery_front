@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
-const Home = ({mobile}) => {
+const Home = ({mobile, grade}) => {
+    const navigate = useNavigate();
+
+    const isAllowed = async () => {
+
+        if (grade == 3) {
+            navigate("/pos");
+        }
+
+    }
+    
+    useEffect(() => {
+        window.scrollTo(0, 0)
+        isAllowed();
+    }, [])
 
     return (
         <div>

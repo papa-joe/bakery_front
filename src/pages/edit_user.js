@@ -2,24 +2,39 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-const Adduser = ({ setToken, setType, mobile, token }) => {
+const EditUser = ({ setToken, setType, mobile, token }) => {
 
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastname] = useState();
+    const [id, setId] = useState();
+    const [fname, setFname] = useState();
+    const [lname, setLname] = useState();
     const [email, setEmail] = useState();
-    const [level, setLevel] = useState();
     const [gender, setGender] = useState();
-    const [password, setPassword] = useState();
+    const [password, setpassword] = useState();
+    const [level, setLevel] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [url, setUrl] = useState();
 
     const navigate = useNavigate();
 
-    async function addUser(e) {
+    function getuser() {
+        const user = JSON.parse(localStorage.getItem('C_user'));
+        setId(user.id)
+        setFname(user.first_name)
+        setLname(user.last_name)
+        setEmail(user.email)
+        setGender(user.gender)
+        setpassword(user.password)
+        setLevel(user.level)
+        setUrl('http://localhost:4000/edit_user/')
+        console.log(user)
+    }
+
+    async function editUser(e) {
         e.preventDefault();
 
         setIsLoading(true);
 
-        if (firstName == null || lastName == null || email == null || level == null || gender == null || password == null) {
+        if (fname == null || lname == null || email == null || level == null || gender == null) {
             setIsLoading(false);
             alert('All fields must be filled')
             return
@@ -27,16 +42,20 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
 
         let formfield = new FormData()
 
-        formfield.append('first_name', firstName)
-        formfield.append('last_name', lastName)
+        formfield.append('id', id)
+        formfield.append('first_name', fname)
+        formfield.append('last_name', lname)
         formfield.append('email', email)
         formfield.append('level', level)
         formfield.append('gender', gender)
-        formfield.append('password', password)
+
+        if (password !== null) {
+            formfield.append('password', password)
+        }
 
         try {
             const { data } = await axios({
-                url: 'http://localhost:4000/add_user',
+                url: url,
                 method: 'POST',
                 data: formfield,
                 headers: {
@@ -45,26 +64,14 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                 },
             })
 
-            if (data.status == 'access') {
+            if (data.status === 'success') {
                 setIsLoading(false);
-                alert('Access denied')
-                return
-            }
-
-            if (data.status == 'success') {
-                setIsLoading(false);
-                setFirstName(null)
-                setLastname(null)
-                setEmail(null)
-                setLevel(null)
-                setGender(null)
-                setPassword(null)
-                alert('User added successfully')
+                alert('User edited successfully')
                 navigate("/users");
                 return
             }
 
-            if (data.status == 'failed') {
+            if (data.status === 'failed') {
                 setIsLoading(false);
                 alert('The Operation has failed, please check your entry and try again')
                 return
@@ -78,6 +85,7 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
+        getuser()
     }, [])
 
     return (
@@ -89,16 +97,16 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                             <div className="">
                                 <div className="panel panel-default">
                                     <div className="panel-heading" style={{ textAlign: "left" }}>
-                                        New User
+                                        Edit User
                                     </div>
-                                    <form onSubmit={addUser} style={{
+                                    <form onSubmit={editUser} style={{
                                         paddingTop: '15px',
                                         paddingRight: '15px',
                                         paddingLeft: '15px',
                                         paddingBottom: '30px'
                                     }}>
-                                        <label>First Name</label>
-                                        <input type="text" className="ggg" name="name" placeholder="Name" onChange={e => setFirstName(e.target.value)} required="" style={{
+                                        <label>Enter First Name</label>
+                                        <input type="text" className="ggg" name="name" placeholder="Name" value={fname} onChange={e => setFname(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -111,8 +119,8 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                                             paddingBottom: '15px'
                                         }} />
 
-                                        <label>Last Name</label>
-                                        <input type="text" className="ggg" name="name" placeholder="Name" onChange={e => setLastname(e.target.value)} required="" style={{
+                                        <label>Enter Last Name</label>
+                                        <input type="text" className="ggg" name="price" placeholder="Price" value={lname} onChange={e => setLname(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -125,8 +133,8 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                                             paddingBottom: '15px'
                                         }} />
 
-                                        <label>Email</label>
-                                        <input type="email" className="ggg" name="price" placeholder="Price" onChange={e => setEmail(e.target.value)} required="" style={{
+                                        <label>Enter Email</label>
+                                        <input type="text" className="ggg" name="price" placeholder="Price" value={email} onChange={e => setEmail(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -152,13 +160,13 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                                             paddingTop: '15px',
                                             paddingBottom: '15px'
                                         }}>
-                                            <option value=''>Choose Gender</option>
+                                            <option value={gender}>{gender}</option>
                                             <option value='Male'>Male</option>
                                             <option value='Female'>Female</option>
                                         </select>
 
                                         <label>Level</label>
-                                        <input type="number" className="ggg" name="quantity" placeholder="Quantity" onChange={e => setLevel(e.target.value)} required="" style={{
+                                        <input type="number" className="ggg" name="lv" placeholder="Level" value={level} onChange={e => setLevel(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -172,7 +180,7 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
                                         }} />
 
                                         <label>Password</label>
-                                        <input type="password" className="ggg" name="price" placeholder="Price" onChange={e => setPassword(e.target.value)} required="" style={{
+                                        <input type="password" className="ggg" name="price" placeholder="Price" onChange={e => setpassword(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',
                                             border: '1px solid #ccc',
@@ -199,4 +207,4 @@ const Adduser = ({ setToken, setType, mobile, token }) => {
     );
 };
 
-export default Adduser;
+export default EditUser;

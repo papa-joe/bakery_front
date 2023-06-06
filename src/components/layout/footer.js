@@ -6,7 +6,7 @@ const Footer = () => {
             <section>
                 <div className="footer">
                     <div className="wthree-copyright">
-                        <p style={{textAlign: 'right'}}>© 2023 BAKERY. All rights reserved</p>
+                        <p style={{textAlign: 'right'}}>© 2023 EMIALUGE. All rights reserved</p>
                     </div>
                 </div>
             </section>

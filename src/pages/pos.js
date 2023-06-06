@@ -11,6 +11,7 @@ const Pos = ({ setToken, setType, mobile, token }) => {
     const [price, setprice] = useState();
     const [productName, setname] = useState();
     const [quantity, setquantity] = useState();
+    const [controlQty, setControlQty] = useState();
 
     const getpost = async () => {
 
@@ -59,11 +60,18 @@ const Pos = ({ setToken, setType, mobile, token }) => {
 
             // console.log(data)
 
-            // if (data.status == 'login') {
-            //     setType('logout')
-            //     setToken('')
-            //     return
-            // }
+            
+
+            if (data.status == 'login') {
+                setType('logout')
+                setToken('')
+                return
+            }
+
+            if (data.status == 'login') {
+                setcart([])
+                return
+            }
         } catch (error) {
 
             if (error.response.data.status == 'login') {
@@ -78,8 +86,13 @@ const Pos = ({ setToken, setType, mobile, token }) => {
     async function addToCart(e) {
         e.preventDefault();
 
-        if (id == null || quantity == null || productName == null) {
+        if (id == null || quantity == null || productName == null || quantity <= 0) {
             alert('All fields must be filled')
+            return
+        }
+
+        if (quantity > controlQty) {
+            alert('Quantity entered exceeds available stock. Please enter a lower quantity.')
             return
         }
 
@@ -116,10 +129,11 @@ const Pos = ({ setToken, setType, mobile, token }) => {
 
     const handleSelect = (event) => {
         const value = event.target.value;
-        const [pId, pName, pPrice] = JSON.parse(value);
+        const [pId, pName, pPrice, pQty] = JSON.parse(value);
         setid(pId)
         setname(pName)
         setprice(pPrice)
+        setControlQty(pQty)
     };
 
     const clearCart = () => {
@@ -164,10 +178,14 @@ const Pos = ({ setToken, setType, mobile, token }) => {
                                             <option value=''>Choose Product</option>
                                             {products.length != 0 &&
                                                 products.map((p, index) => (
-                                                    <option key={index} value={JSON.stringify([p.id, p.name, p.price])}>{p.name}</option>
+                                                    <option key={index} value={JSON.stringify([p.id, p.name, p.price, p.quantity])}>{p.name}</option>
                                                 ))
                                             }
                                         </select>
+
+                                        <small>Current quantity is: <strong>{controlQty}</strong></small><br></br>
+                                        <small>Current price is: <strong>{price}</strong></small><br></br>
+
                                         <input type="number" className="ggg" name="quantity" placeholder="Quantity" onChange={e => setquantity(e.target.value)} required="" style={{
                                             width: '100%',
                                             padding: '15px 0px 15px 15px',

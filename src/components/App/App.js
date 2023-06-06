@@ -21,31 +21,34 @@ import Products from '../../pages/products';
 import History from '../../pages/history';
 import Adduser from '../../pages/add_user';
 import useToken from './useToken';
+import EditUser from '../../pages/edit_user';
 
 function App() {
   const [mobile, setMobile] = useState(false)
   const [type, setType] = useState('login')
 
   const { token, setToken } = useToken(type);
+  const [grade, setGrade] = useState();
 
   if(!token) {
-    return <Login setToken={setToken} setType={setType} />
+    return <Login setToken={setToken} setType={setType} setGrade={setGrade} />
   }
 
   return (
     <div className="App">
       <Router>
-        <Header mobile={mobile} setMobile={setMobile} />
-        <Sidebar mobile={mobile} setToken={setToken} setType={setType} token={token} />
+        <Header mobile={mobile} setMobile={setMobile} grade={grade} />
+        <Sidebar mobile={mobile} setToken={setToken} setType={setType} token={token} grade={grade} />
         <Routes>
-          <Route exact path="/" element={<Home mobile={mobile} />} />
-          <Route exact path="/users" element={<Users mobile={mobile} />} />
-          <Route exact path="/products" element={<Products mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
-          <Route exact path="/history" element={<History mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
-          <Route exact path="/pos" element={<Pos mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
-          <Route exact path="/add-product" element={<Addproduct mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
-          <Route exact path="/add-user" element={<Adduser mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
-          <Route exact path="/edit-product" element={<Editproduct mobile={mobile} token={token} setToken={setToken} setType={setType} />} />
+          <Route exact path="/" element={<Home mobile={mobile} grade={grade} />} />
+          <Route exact path="/users" element={<Users mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/products" element={<Products mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/history" element={<History mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/pos" element={<Pos mobile={mobile} token={token} setToken={setToken} setType={setType} />} grade={grade} />
+          <Route exact path="/add-product" element={<Addproduct mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/add-user" element={<Adduser mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/edit-product" element={<Editproduct mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
+          <Route exact path="/edit-user" element={<EditUser mobile={mobile} token={token} setToken={setToken} setType={setType} grade={grade} />} />
         </Routes>
         <Footer />
       </Router>

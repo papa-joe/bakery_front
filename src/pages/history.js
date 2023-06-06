@@ -2,11 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const History = ({ setToken, setType, mobile, token }) => {
+const History = ({ setToken, setType, mobile, token, grade }) => {
 
     const [post, setpost] = useState('')
     const [filterDate, setDate] = useState();
     const navigate = useNavigate();
+
+    const isAllowed = async () => {
+
+        if (grade == 3) {
+            navigate("/pos");
+        }
+
+    }
 
     const getpost = async () => {
 
@@ -26,6 +34,7 @@ const History = ({ setToken, setType, mobile, token }) => {
                 return
             }
 
+            console.log(data.records)
             setpost(data.records)
         } catch (error) {
 
@@ -39,6 +48,7 @@ const History = ({ setToken, setType, mobile, token }) => {
     }
 
     const getRecords = async () => {
+        alert('dfdsfsdf')
         let formfield = new FormData()
 
         formfield.append('date', filterDate)
@@ -60,6 +70,7 @@ const History = ({ setToken, setType, mobile, token }) => {
     useEffect(() => {
         window.scrollTo(0, 0)
         getpost();
+        isAllowed();
     }, [])
 
     return (
@@ -91,30 +102,41 @@ const History = ({ setToken, setType, mobile, token }) => {
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Type</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
                                             <th>Total</th>
+                                            <th>Attendant</th>
                                             <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {post.length != 0 &&
                                             post.map((post, index) => (
-                                                <tr key={index}>
+                                                <tr key={index} style={{ backgroundColor: post.type === "Expenditure" ? "#ffe6e6" : "#e6ffe6" }}>
                                                     <th>{post.name}</th>
+                                                    <th>{post.type}</th>
                                                     <th>{post.price}</th>
                                                     <th>{post.quantity}</th>
                                                     <th>{post.total}</th>
+                                                    <th>{post.seller}</th>
                                                     <th>{new Date(post.createdAt).toISOString().substring(0, 10)}</th>
                                                 </tr>
                                             ))
                                         }
                                         {post.length != 0 && (
+                                            <>
                                             <tr>
-                                                <td colSpan="3"><strong>Total</strong></td>
-                                                <td>{post.reduce((acc, cur) => acc + cur.total, 0)}</td>
+                                                <td colSpan="3"><strong>Total Expenditure</strong></td>
+                                                <td>{post.reduce((acc, cur) => cur.type == 'Expenditure' ? acc + cur.total : acc + 0, 0)}</td>
                                                 <td></td>
                                             </tr>
+                                            <tr>
+                                                <td colSpan="3"><strong>Total Income</strong></td>
+                                                <td>{post.reduce((acc, cur) => cur.type == 'Income' ? acc + cur.total : acc + 0, 0)}</td>
+                                                <td></td>
+                                            </tr>
+                                            </>
                                         )}
                                     </tbody>
                                 </table>

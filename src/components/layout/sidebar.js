@@ -1,11 +1,12 @@
 import React from "react";
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import { grad } from "@tensorflow/tfjs";
 
-const Sidebar = ({mobile, setToken, setType, token}) => {
-    
-    
-    async function logout () {
+const Sidebar = ({ mobile, setToken, setType, token, grade }) => {
+
+
+    async function logout() {
         // axios({
         //     method: 'POST',
         //     url: 'http://localhost:4000/logout',
@@ -30,52 +31,61 @@ const Sidebar = ({mobile, setToken, setType, token}) => {
         setType('logout')
         setToken('')
 
-        
+
     }
 
     return <div>
-       <aside>
+        <aside>
             <div id="sidebar" className={mobile ? "nav-collapse hide-left-bar" : "nav-collapse"}>
                 <div className="leftside-navigation">
                     <ul className="sidebar-menu" id="nav-accordion">
+
+
+
+                        {grade == 1 &&
+                            <>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/">
+                                        <i className="fa fa-dashboard"></i>
+                                        <span>Dashboard</span>
+                                    </NavLink>
+                                </li>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/add-user">
+                                        <i className="fa fa-book"></i>
+                                        <span>Add User</span>
+                                    </NavLink>
+                                </li>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/users">
+                                        <i className="fa fa-book"></i>
+                                        <span>Users</span>
+                                    </NavLink>
+                                </li>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/add-product">
+                                        <i className="fa fa-book"></i>
+                                        <span>Add Product</span>
+                                    </NavLink>
+                                </li>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/products">
+                                        <i className="fa fa-book"></i>
+                                        <span>Products</span>
+                                    </NavLink>
+                                </li>
+                                <li className="sub-menu side-bar-item">
+                                    <NavLink to="/history">
+                                        <i className="fa fa-book"></i>
+                                        <span>History</span>
+                                    </NavLink>
+                                </li>
+                            </>
+                        }
+
+
                         <li className="sub-menu side-bar-item">
-                        <NavLink to="/">
-                                <i className="fa fa-dashboard"></i>
-                                <span>Dashboard</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                            <NavLink to="/add-user">
-                                <i className="fa fa-book"></i>
-                                <span>Add User</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                            <NavLink to="/users">
-                                <i className="fa fa-book"></i>
-                                <span>Users</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                        <NavLink to="/add-product">
-                                <i className="fa fa-book"></i>
-                                <span>Add Product</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                        <NavLink to="/products">
-                                <i className="fa fa-book"></i>
-                                <span>Products</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                        <NavLink to="/history">
-                                <i className="fa fa-book"></i>
-                                <span>History</span>
-                            </NavLink>
-                        </li>
-                        <li className="sub-menu side-bar-item">
-                        <NavLink to="/pos">
+                            <NavLink to="/pos">
                                 <i className="fa fa-book"></i>
                                 <span>POS</span>
                             </NavLink>
@@ -87,8 +97,8 @@ const Sidebar = ({mobile, setToken, setType, token}) => {
                             </a>
                         </li>
                     </ul>
-                    </div>
-                
+                </div>
+
             </div>
         </aside>
     </div>;

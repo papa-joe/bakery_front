@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const Addproduct = ({ setToken, setType, mobile, token }) => {
 
@@ -8,6 +8,8 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
     const [productName, setname] = useState();
     const [productQuantity, setquantity] = useState();
     const [isLoading, setIsLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     async function addProduct(e) {
         e.preventDefault();
@@ -43,6 +45,7 @@ const Addproduct = ({ setToken, setType, mobile, token }) => {
                 setname(null)
                 setquantity(null)
                 alert('Product added successfully')
+                navigate("/products");
                 return
             }
 

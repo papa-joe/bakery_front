@@ -14,7 +14,7 @@ function Header({mobile, setMobile}) {
             <header className="header fixed-top clearfix">
             <div className="brand">
                 <a href="index.html" className="logo">
-                    BAKERY
+                    EMIALUGE
                 </a>
                 <div className="sidebar-toggle-box" onClick={addcomment}>
                     <div className="fa fa-bars"></div>

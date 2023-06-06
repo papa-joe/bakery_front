@@ -17,7 +17,7 @@ async function loginUser(credentials) {
 //     return {token:'123tk'}
 // }
 
-const Login = ({setToken, setType}) => {
+const Login = ({setToken, setType, setGrade}) => {
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
@@ -34,8 +34,10 @@ const Login = ({setToken, setType}) => {
         formfield.append('password', password)
 
         const token = await loginUser(formfield);
+        console.log(token)
         setType('login')
         setToken({token: token.token});
+        setGrade(token.level);
     }
 
     return (
